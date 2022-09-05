@@ -34,7 +34,7 @@ add_button.click()
 time.sleep(2)
 
 upload_button = browser.find_element_by_xpath("//input[@type='file']")
-upload_button.send_keys("/root/Desktop/bot/AD_view/captcha_bypasser/bin/tempermonkey.js")
+upload_button.send_keys("/home/alibaba/bin/tempermonkey.js")
 
 time.sleep(2)
 
@@ -57,6 +57,8 @@ time.sleep(5)
 # browser.find_element_by_class_name('CodeMirror-scrol').send_keys(Keys.BACKSPACE) 
 # browser.find_element_by_class_name('CodeMirror-scrol').send_keys(recaptcha_script) 
 # browser.send_keys(recaptcha_script)
+
+print("Captcha Bypassser Installed")
 
 browser.get("http://stackoverflow.com")
 time.sleep(1)
