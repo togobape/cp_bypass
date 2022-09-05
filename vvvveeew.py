@@ -7,14 +7,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 # For Webdriver
-# from selenium.webdriver.chrome.service import Service
-# from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_extension('bin/4.16.1_0.crx')
 chrome_options.add_argument("--start-maximized")
+chrome_options.headless=True
 
-browser = webdriver.Chrome(options=chrome_options)
+# browser = webdriver.Chrome(options=chrome_options)
+browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 wait = WebDriverWait(browser, 20)
 time.sleep(10)
 
