@@ -18,8 +18,9 @@ chrome_options.headless=True
 # browser = webdriver.Chrome(options=chrome_options)
 browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 wait = WebDriverWait(browser, 20)
-time.sleep(10)
+time.sleep(15)
 
+print("Browser Loaded")
 
 extension_url = "chrome-extension://dhdgffkkebhmkfjojejmpbldmpobfkfo/options.html#nav=dashboard"
 browser.get(extension_url)
