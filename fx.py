@@ -1,4 +1,4 @@
-import time, sys
+import time, sys, os
 from colorama import Fore, Style
 from selenium import webdriver
 # For Firefox
@@ -13,31 +13,39 @@ from selenium.webdriver.support import expected_conditions as EC
 # from selenium.webdriver.chrome.service import Service
 # from webdriver_manager.chrome import ChromeDriverManager
 
-# Chrome Version
-# chrome_options = webdriver.ChromeOptions()
-# chrome_options.add_extension('bin/4.16.1_0.crx')
-# chrome_options.add_argument("--start-maximized")
-# chrome_options.headless=True
-
 # browser = webdriver.Chrome(options=chrome_options)
 # # browser = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 # wait = WebDriverWait(browser, 20)
 # time.sleep(15)
 
 # Firefox Version
+# https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz
 # https://addons.mozilla.org/firefox/downloads/file/3947043/tampermonkey-4.17.6161.xpi
 # moz-extension://f08359e3-dfda-4443-b263-81377d1ea4a3/
+
+# Prepare for execution
+current_dir = os.getcwd()
+os.mkdir("bin")
+os.system("cd bin/ && wget https://addons.mozilla.org/firefox/downloads/file/3947043/tampermonkey-4.17.6161.xpi")
+print("Plugin Downloaded")
+os.system("cd bin/ && wget https://raw.githubusercontent.com/togobape/cp_bypass/main/tempermonkey.js")
+print("Bypasser Downloaded")
+os.system("cd bin/ && wget https://github.com/mozilla/geckodriver/releases/download/v0.31.0/geckodriver-v0.31.0-linux64.tar.gz")
+print("Gecko Driver Downloaded")
+os.system("cd bin/ && tar -xvzf geckodriver-v0.31.0-linux64.tar.gz")
+print("Gecko Extracted")
+os.system("chmod +x bin/geckodriver")
+print("CHMOD of gecko changed")
+
+# Browser Loading Section
 options = Options()
-# options.headless = True
+options.headless = True
 browser = webdriver.Firefox(options=options, executable_path=r'bin/geckodriver')
-browser.install_addon('/root/Desktop/bot/AD_view/captcha_bypasser/bin/tampermonkey-4.17.6161.xpi', temporary=True)
+browser.install_addon(f'{current_dir}/bin/tampermonkey-4.17.6161.xpi', temporary=True)
 wait = WebDriverWait(browser, 20)
 time.sleep(15)
 
 print("Browser Loaded")
-
-# For Chrome
-# extension_url = "chrome-extension://dhdgffkkebhmkfjojejmpbldmpobfkfo/options.html#nav=dashboard"
 
 # For Firefox
 browser.switch_to.window(browser.window_handles[0])
@@ -49,6 +57,27 @@ browser.get("about:addons")
 
 time.sleep(5)
 
+print("Extension Loaded")
+
+extension_button = browser.find_element_by_xpath("//button[@name='extension']")
+extension_button.click()
+
+more_option_button = browser.find_element_by_xpath("//button[@action='more-options']")
+more_option_button.click()
+
+time.sleep(1)
+
+preferance_button = browser.find_element_by_xpath("//panel-item[@action='preferences']")
+preferance_button.click()
+
+time.sleep(1)
+
+browser.switch_to.window(browser.window_handles[1])
+time.sleep(2)
+
+dashboard_button = browser.find_element_by_xpath("//div[contains(text(), 'Installed Userscripts')]")
+dashboard_button.click()
+
 with open("bin/tempermonkey.js", "r") as recaptcha_file:
 	recaptcha_script = recaptcha_file.read()
 
@@ -58,12 +87,16 @@ add_button.click()
 time.sleep(2)
 
 upload_button = browser.find_element_by_xpath("//input[@type='file']")
-upload_button.send_keys("/home/alibaba/bin/tempermonkey.js")
+upload_button.send_keys(f"{current_dir}/bin/tempermonkey.js")
 
 time.sleep(2)
 
 # print(browser.window_handles)
-browser.switch_to.window(browser.window_handles[1])
+browser.switch_to.window(browser.window_handles[0])
+browser.close()
+time.sleep(2)
+
+browser.switch_to.window(browser.window_handles[2])
 browser.close()
 time.sleep(2)
 
@@ -77,11 +110,6 @@ add_button.click()
 
 time.sleep(5)
 
-# browser.find_element_by_class_name('CodeMirror-scroll').send_keys(Keys.CONTROL + 'a') 
-# browser.find_element_by_class_name('CodeMirror-scrol').send_keys(Keys.BACKSPACE) 
-# browser.find_element_by_class_name('CodeMirror-scrol').send_keys(recaptcha_script) 
-# browser.send_keys(recaptcha_script)
-
 print("Captcha Bypassser Installed")
 
 browser.get("http://stackoverflow.com")
@@ -93,4 +121,3 @@ time.sleep(10)
 
 
 browser.quit()
-
